@@ -7,27 +7,37 @@
 
 /* --- UPDATED: Header is now centered --- */
 .page-header {
-  display: flex;
-  justify-content: center; /* This centers the .portal-title */
-  align-items: center;
-  width: 100%; /* Ensure it takes full width to center its content */
+  display: flex; justify-content: center; align-items: center; width: 100%;
 }
-.portal-title {
-  text-align: center; /* Align its own text/icon content */
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+.portal-title-button {
+  background: none; border: none; cursor: pointer; padding: 0.5rem 1rem; border-radius: 8px;
+  display: flex; align-items: center;
+  gap: 0.8rem;
+  transition: background-color 0.2s ease-in-out;
+  color: var(--foreground-color); /* Ensure text and icons inherit color */
 }
 
-/* --- UPDATED: Footer container is now centered --- */
+.portal-title {
+  color: var(--foreground-color); /* Make sure text inherits color */
+  text-align: center; display: flex; align-items: center; gap: 0.5rem;
+}
+.portal-title-button:hover { background-color: var(--box-background); }
+.portal-title-button h1 {
+  font-family: monospace;
+  text-transform: uppercase;
+  font-size: 1.2rem;
+  letter-spacing: 0.2em;
+  margin: 0;
+  white-space: nowrap; /* Prevent title from wrapping */
+}
+.theme-indicator { color: var(--primary-color); display: flex; align-items: center; }
+.qr-icon { color: var(--primary-color); animation: pulse 2s infinite; }
+
 .page-footer {
   display: flex; flex-direction: column; align-items: center; gap: 0.5rem; padding-top: 1rem; opacity: 0.8;
-  margin-left: auto; /* This centers the block */
-  margin-right: auto; /* This centers the block */
+  margin-left: auto; margin-right: auto;
 }
 .footer-text { text-align: center; }
-.portal-title h1 { font-size: 1.2rem; letter-spacing: 0.2em; margin: 0; }
-.qr-icon { color: var(--primary-color); animation: pulse 2s infinite; }
 .footer-logo { width: 50px; }
 .footer-text p { margin: 0; font-weight: bold; letter-spacing: 1px; }
 .footer-text span { font-size: 0.7rem; color: var(--muted-text-color); }
@@ -114,7 +124,11 @@ a.badge:hover { cursor: pointer; transform: translateY(-2px); box-shadow: 0 4px 
 .info-link:hover { color: var(--primary-color); text-decoration: underline; }
 
 /* Social Links */
-.social-links-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.5rem; }
+.social-links-container { /* Renamed from social-links-grid */
+  display: flex;
+  flex-wrap: wrap; /* This is the key property */
+  gap: 0.5rem;
+}
 .social-link-item {
   display: flex; align-items: center; gap: 0.8rem; background: transparent; border: 1px solid var(--border-color);
   padding: 0.5rem 0.8rem; border-radius: 8px; font-size: 0.8rem; text-decoration: none;

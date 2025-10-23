@@ -9,11 +9,10 @@ html, body, #root {
 .profile-page-container {
   display: flex;
   flex-direction: column;
-  /* --- THIS IS THE FIX: Center all direct children horizontally --- */
   align-items: center; 
   justify-content: space-between;
   min-height: 100vh;
-  padding: 1.5rem; /* A bit more padding for balance */
+  padding: 1.5rem;
   overflow-x: hidden;
 }
 
@@ -34,7 +33,7 @@ html, body, #root {
   text-align: center;
 }
 
-/* === Loader Styles === */
+/* === UPDATED: Loader Styles for Correct Layout === */
 .loading-container {
   position: fixed;
   top: 0;
@@ -42,13 +41,34 @@ html, body, #root {
   width: 100%;
   height: 100%;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   background-color: var(--background-color);
   z-index: 999;
 }
+
+.loading-logo {
+  /* --- THIS IS THE CHANGE: Smaller, more proportional size --- */
+  width: 150px;
+  /* --- THIS IS THE CHANGE: Balanced margin --- */
+  margin-bottom: 1.5rem;
+  animation: logo-pulse 2.5s ease-in-out infinite;
+}
+
+@keyframes logo-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 1;
+  }
+}
+
 .loader {
-  height: 80px;
+  height: 40px;
   aspect-ratio: 1;
   padding: 10px;
   border-radius: 20px;

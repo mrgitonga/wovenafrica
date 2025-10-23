@@ -169,7 +169,7 @@ const HolographicCard = ({ profile }) => {
         {(profile.socialFacebook || profile.socialX || profile.socialInstagram || profile.socialLinkedin || profile.socialTiktok) && (
           <div className="section">
             <p className="section-title">SOCIAL MEDIA</p>
-            <div className="social-links-grid">
+            <div className="social-links-container">
               {profile.socialFacebook && <a href={getSocialLink('Facebook', profile.socialFacebook)} target="_blank" rel="noopener noreferrer" className="social-link-item"><Facebook className="icon" /><span>{profile.socialFacebook}</span></a>}
               {profile.socialX && <a href={getSocialLink('X', profile.socialX)} target="_blank" rel="noopener noreferrer" className="social-link-item"><img src={xLogo} alt="X logo" className="icon-svg"/><span>{profile.socialX}</span></a>}
               {profile.socialInstagram && <a href={getSocialLink('Instagram', profile.socialInstagram)} target="_blank" rel="noopener noreferrer" className="social-link-item"><Instagram className="icon" /><span>{profile.socialInstagram}</span></a>}
@@ -199,12 +199,11 @@ const HolographicCard = ({ profile }) => {
 
         {profile.locationAddress && (
           <div className="section">
+            <p className="section-title">LOCATION</p>
             <a href={googleMapsUrl} target="_blank" rel="noopener noreferrer" className="location-box">
+                {/* The MapPin icon is now back inside the clickable link */}
                 <MapPin className="icon primary" />
-                <div>
-                  <p className="status-label">LOCATION</p>
-                  <p className="location-address">{profile.locationAddress}</p>
-                </div>
+                <p className="location-address">{profile.locationAddress}</p>
             </a>
           </div>
         )}

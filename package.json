@@ -2,7 +2,7 @@
   "name": "woven-africa",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://mrgitonga.github.io",
+  "homepage": "https://mrgitonga.github.io/wovenafrica",
   "dependencies": {
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.8.0",

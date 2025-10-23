@@ -4,9 +4,9 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import HolographicCard from '../components/HolographicCard';
 import GridBackground from '../components/GridBackground';
-import ThemeToggle from '../components/ThemeToggle';
+import { useTheme } from '../contexts/ThemeContext';
 import wovenAfricaLogo from '../assets/woven-africa.png';
-import { QrCode } from 'lucide-react';
+import { QrCode, Sun, Moon } from 'lucide-react';
 
 import '../styles/GridBackground.css';
 import '../styles/HolographicCard.css';
@@ -16,6 +16,8 @@ const ProfilePage = () => {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const { theme, toggleTheme } = useTheme();  
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -42,26 +44,28 @@ const ProfilePage = () => {
   if (loading) {
     return (
       <div className="loading-container">
+        <img src={wovenAfricaLogo} alt="Woven Africa Loading" className="loading-logo" />
         <div className="loader"></div>
       </div>
     );
   }
 
   if (error) return <div className="status-message">CONNECTION ERROR: {error}</div>;
-  if (!profile) return <div className="status-message">NO DATA FOUND FOR ID: {profileId}</div>;
+  if (!profile) return <div className="status-message">PROFILE NOT FOUND</div>;
 
   return (
     <div className="profile-page-container">
       <GridBackground />
       {/* --- THIS IS THE CHANGE: ThemeToggle is now outside the header --- */}
-      <ThemeToggle />
 
       <header className="page-header">
-          <div className="portal-title">
-             <QrCode className="qr-icon" />
-            <h1>QR ACCESS PORTAL</h1>
-         </div>
-         {/* The ThemeToggle is no longer here */}
+        <button className="portal-title-button" onClick={toggleTheme}>
+           <QrCode className="qr-icon" />
+           <h1>QR ACCESS PORTAL</h1>
+           <div className="theme-indicator">
+             {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
+           </div>
+        </button>
       </header>
 
       <main className="main-content">
