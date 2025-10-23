@@ -1,0 +1,23 @@
+/* src/styles/GridBackground.css */
+.grid-background {
+  position: fixed;
+  inset: 0;
+  z-index: -1; /* Place it behind everything */
+  background-color: var(--background-color);
+  background-image:
+    linear-gradient(rgba(0, 229, 255, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 229, 255, 0.1) 1px, transparent 1px);
+  background-size: 50px 50px;
+  animation: grid-pulse 4s ease-in-out infinite;
+}
+
+.grid-glow {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 50%, rgba(0, 229, 255, 0.1), transparent 70%);
+}
+
+@keyframes grid-pulse {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.5; }
+}
