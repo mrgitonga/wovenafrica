@@ -10,8 +10,9 @@ html, body, #root {
   display: flex;
   flex-direction: column;
   align-items: center; 
-  justify-content: space-between;
-  min-height: 100vh;
+  /* --- THIS IS THE KEY CHANGE --- */
+  /* We remove 'justify-content: space-between' to stop forcing the footer to the bottom */
+  min-height: 100vh; /* Ensure the container always fills at least the full screen height */
   padding: 1.5rem;
   overflow-x: hidden;
 }
@@ -22,7 +23,7 @@ html, body, #root {
   justify-content: center;
   align-items: center;
   margin: 1.5rem 0;
-  flex-grow: 1;
+  /* flex-grow is no longer needed as we're not distributing extra space this way */
   overflow: hidden;
 }
 
@@ -33,7 +34,7 @@ html, body, #root {
   text-align: center;
 }
 
-/* === UPDATED: Loader Styles for Correct Layout === */
+/* === Loader Styles (Unchanged) === */
 .loading-container {
   position: fixed;
   top: 0;
@@ -47,28 +48,17 @@ html, body, #root {
   background-color: var(--background-color);
   z-index: 999;
 }
-
 .loading-logo {
-  /* --- THIS IS THE CHANGE: Smaller, more proportional size --- */
-  width: 150px;
-  /* --- THIS IS THE CHANGE: Balanced margin --- */
+  width: 90px;
   margin-bottom: 1.5rem;
   animation: logo-pulse 2.5s ease-in-out infinite;
 }
-
 @keyframes logo-pulse {
-  0%, 100% {
-    transform: scale(1);
-    opacity: 0.9;
-  }
-  50% {
-    transform: scale(1.05);
-    opacity: 1;
-  }
+  0%, 100% { transform: scale(1); opacity: 0.9; }
+  50% { transform: scale(1.05); opacity: 1; }
 }
-
 .loader {
-  height: 40px;
+  height: 80px;
   aspect-ratio: 1;
   padding: 10px;
   border-radius: 20px;
