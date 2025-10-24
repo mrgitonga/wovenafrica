@@ -10,7 +10,7 @@ import {
 import xLogo from '../assets/x-logo.svg';
 import tiktokLogo from '../assets/tiktok.svg';
 import bitcoinLogo from '../assets/bitcoin.svg';
-
+import whatsappLogo from '../assets/whatsapp.svg'; 
 // --- HELPER FUNCTIONS ---
 
 // Parses the special [Text](URL) format for clickable badges.
@@ -55,12 +55,17 @@ const getPaymentIcon = (key) => {
 };
 
 const getSocialLink = (platform, handle) => {
+    const handleAsString = (handle || '').toString();
     switch (platform) {
       case 'Facebook': return `https://facebook.com/${handle.replace('/', '')}`;
       case 'X': return `https://x.com/${handle.replace('@', '')}`;
       case 'Instagram': return `https://instagram.com/${handle.replace('@', '')}`;
       case 'Linkedin': return `https://linkedin.com/company/${handle.replace('/', '')}`;
       case 'Tiktok': return `https://tiktok.com/@${handle.replace('@', '')}`;
+      case 'Whatsapp':
+        // The regex now safely runs on the string version of the number.
+        const phoneNumber = handleAsString.replace(/[\s-()+]/g, '');
+        return `https://wa.me/${phoneNumber}`;     
       default: return '#';
     }
 };
@@ -166,13 +171,14 @@ const HolographicCard = ({ profile }) => {
           </div>
         )}
         
-        {(profile.socialFacebook || profile.socialX || profile.socialInstagram || profile.socialLinkedin || profile.socialTiktok) && (
+        {(profile.socialFacebook || profile.socialX || profile.socialInstagram || profile.socialLinkedin || profile.socialTiktok || profile.socialWhatsapp) && (
           <div className="section">
             <p className="section-title">SOCIAL MEDIA</p>
             <div className="social-links-container">
+              {profile.socialWhatsapp && <a href={getSocialLink('Whatsapp', profile.socialWhatsapp)} target="_blank" rel="noopener noreferrer" className="social-link-item"><img src={whatsappLogo} alt="WhatsApp logo" className="icon-svg"/><span>{profile.socialWhatsapp}</span></a>}
               {profile.socialFacebook && <a href={getSocialLink('Facebook', profile.socialFacebook)} target="_blank" rel="noopener noreferrer" className="social-link-item"><Facebook className="icon" /><span>{profile.socialFacebook}</span></a>}
-              {profile.socialX && <a href={getSocialLink('X', profile.socialX)} target="_blank" rel="noopener noreferrer" className="social-link-item"><img src={xLogo} alt="X logo" className="icon-svg"/><span>{profile.socialX}</span></a>}
               {profile.socialInstagram && <a href={getSocialLink('Instagram', profile.socialInstagram)} target="_blank" rel="noopener noreferrer" className="social-link-item"><Instagram className="icon" /><span>{profile.socialInstagram}</span></a>}
+              {profile.socialX && <a href={getSocialLink('X', profile.socialX)} target="_blank" rel="noopener noreferrer" className="social-link-item"><img src={xLogo} alt="X logo" className="icon-svg"/><span>{profile.socialX}</span></a>}              
               {profile.socialTiktok && <a href={getSocialLink('Tiktok', profile.socialTiktok)} target="_blank" rel="noopener noreferrer" className="social-link-item"><img src={tiktokLogo} alt="TikTok logo" className="icon-svg"/><span>{`@${profile.socialTiktok.replace('@','')}`}</span></a>}
               {profile.socialLinkedin && <a href={getSocialLink('Linkedin', profile.socialLinkedin)} target="_blank" rel="noopener noreferrer" className="social-link-item"><Linkedin className="icon" /><span>{profile.socialLinkedin}</span></a>}
             </div>
