@@ -1,6 +1,6 @@
 // src/components/HolographicCard.js
 
-import React, { useState } from 'react';
+import React from 'react';
 import '../styles/HolographicCard.css';
 import {
   Heart, Shield, Award, BadgeCheck, MapPin, Globe, Phone, Mail, Clock,
@@ -10,10 +10,31 @@ import {
 import xLogo from '../assets/x-logo.svg';
 import tiktokLogo from '../assets/tiktok.svg';
 import bitcoinLogo from '../assets/bitcoin.svg';
-import whatsappLogo from '../assets/whatsapp.svg'; 
-// --- HELPER FUNCTIONS ---
+import whatsappLogo from '../assets/whatsapp.svg';
+import VideoCarousel from './VideoCarousel'; // Import the new carousel component
 
-// Parses the special [Text](URL) format for clickable badges.
+// --- HELPER FUNCTIONS ---
+const StatusBox = ({ icon, label, value, url }) => {
+  const content = (
+    <>
+      {icon}
+      <div>
+        <p className="status-label">{label}</p>
+        <p className={`status-value ${label === 'HEALTH STATUS' ? 'excellent' : ''}`}>{value}</p>
+      </div>
+    </>
+  );
+
+  if (url) {
+    return (
+      <a href={url} target="_blank" rel="noopener noreferrer" className="status-box">
+        {content}
+      </a>
+    );
+  }
+  return <div className="status-box">{content}</div>;
+};
+// This helper function parses a string to see if it matches the [Text](URL) format for badges/awards.
 const parseLinkableItem = (itemString) => {
   const match = itemString.match(/\[(.*?)\]\((.*?)\)/);
   if (match && match[1] && match[2]) {
@@ -35,8 +56,7 @@ const getPaymentDisplayName = (key) => {
   return displayNameMap[key] || key;
 };
 
-// --- DEFINITIVE FIX for Icon Logic ---
-// This single function now reliably returns the correct icon based on the sheet key.
+// Returns the correct icon based on the sheet key.
 const getPaymentIcon = (key) => {
   switch (key) {
     case 'mpesa':
@@ -47,101 +67,77 @@ const getPaymentIcon = (key) => {
     case 'bitcoin':
       return <img src={bitcoinLogo} alt="Bitcoin" className="icon-svg" />;
     case 'cash':
-      return <Wallet className="icon" />;
     case 'other':
     default:
-      return <Wallet className="icon" />; // Fallback for 'other' or unknown types
+      return <Wallet className="icon" />;
   }
 };
 
 const getSocialLink = (platform, handle) => {
-    const handleAsString = (handle || '').toString();
-    switch (platform) {
-      case 'Facebook': return `https://facebook.com/${handle.replace('/', '')}`;
-      case 'X': return `https://x.com/${handle.replace('@', '')}`;
-      case 'Instagram': return `https://instagram.com/${handle.replace('@', '')}`;
-      case 'Linkedin': return `https://linkedin.com/company/${handle.replace('/', '')}`;
-      case 'Tiktok': return `https://tiktok.com/@${handle.replace('@', '')}`;
-      case 'Whatsapp':
-        // The regex now safely runs on the string version of the number.
-        const phoneNumber = handleAsString.replace(/[\s-()+]/g, '');
-        return `https://wa.me/${phoneNumber}`;     
-      default: return '#';
-    }
+  // Ensure the handle is always a string to prevent .replace errors
+  const handleAsString = (handle || '').toString();
+  switch (platform) {
+    case 'Facebook': return `https://facebook.com/${handleAsString.replace('/', '')}`;
+    case 'X': return `https://x.com/${handleAsString.replace('@', '')}`;
+    case 'Instagram': return `https://instagram.com/${handleAsString.replace('@', '')}`;
+    case 'Linkedin': return `https://linkedin.com/company/${handleAsString.replace('/', '')}`;
+    case 'Tiktok': return `https://tiktok.com/@${handleAsString.replace('@', '')}`;
+    case 'Whatsapp':
+      const phoneNumber = handleAsString.replace(/[\s-()+]/g, '');
+      return `https://wa.me/${phoneNumber}`;
+    default: return '#';
+  }
 };
 
 const HolographicCard = ({ profile }) => {
   const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${profile.locationLat},${profile.locationLng}`;
-  const [isMuted, setIsMuted] = useState(true);
-  const handleUnmute = () => setIsMuted(false);
-  const getYouTubeUrl = (videoId) => {
-    const params = new URLSearchParams({ autoplay: '1', loop: '1', controls: '1', playlist: videoId });
-    if (isMuted) params.append('mute', '1');
-    return `https://www.youtube.com/embed/${videoId}?${params.toString()}`;
-  };
+
+  // Parse the YouTube ID string into an array, then reverse it so the newest video is first.
+  let youtubeIds = [];
+  if (profile.youtubeId && typeof profile.youtubeId === 'string') {
+    youtubeIds = profile.youtubeId.split(';').map(id => id.trim()).reverse();
+  }
+  // Parse health and security fields
+  const healthInfo = parseLinkableItem(profile.healthStatus || '');
+  const securityInfo = parseLinkableItem(profile.securityProvider || '');
 
   return (
     <div className="holographic-card">
       <div className="card-scroll-content">
-        
+
+        {/* --- SECTION 1: Header with new BadgeCheck icon --- */}
         <div className="card-header">
           <span className="category-badge">{profile.category}</span>
-          {profile.licenseStatus === 'verified' && (
-            <div className="verified-status"><BadgeCheck/> VERIFIED</div>
-          )}
+          {profile.licenseStatus === 'verified' && ( <div className="verified-status"><BadgeCheck /> VERIFIED</div> )}
         </div>
         <h1 className="company-name">{profile.companyName}</h1>
-        
         <div className="header-divider"></div>
-
-        {/* --- DEFINITIVE FIX for Description --- */}
-        {/* It is now wrapped in a .section div to guarantee consistent spacing. */}
+        
+        {/* --- SECTION 2: Description --- */}
         {profile.description && (
           <div className="section">
             <p className="company-description">{profile.description}</p>
           </div>
         )}
 
+        {/* --- SECTION 3: Video Carousel --- */}
+        {youtubeIds.length > 0 && (
+          <div className="video-portal">
+            <VideoCarousel youtubeIds={youtubeIds} />
+          </div>
+        )}
+
+        {/* --- SECTION 4: Health & Security --- */}
         <div className="status-grid">
           {profile.healthStatus && (
-            <div className="status-box">
-              <Heart className="icon primary" />
-              <div>
-                <p className="status-label">HEALTH STATUS</p>
-                <p className="status-value excellent">{profile.healthStatus}</p>
-              </div>
-            </div>
+            <StatusBox icon={<Heart className="icon primary" />} label="HEALTH STATUS" value={healthInfo.text} url={healthInfo.url} />
           )}
           {profile.securityProvider && (
-            <div className="status-box">
-              <Shield className="icon accent" />
-              <div>
-                <p className="status-label">SECURITY</p>
-                <p className="status-value">{profile.securityProvider}</p>
-              </div>
-            </div>
+            <StatusBox icon={<Shield className="icon accent" />} label="SECURITY" value={securityInfo.text} url={securityInfo.url} />
           )}
         </div>
 
-        {profile.youtubeId && (
-          <div className="video-portal">
-            <div className="video-container youtube-container">
-              {isMuted && (
-                <div className="unmute-overlay" onClick={handleUnmute}>
-                  <div className="unmute-text">Click to Unmute</div>
-                </div>
-              )}
-              <iframe
-                src={getYouTubeUrl(profile.youtubeId)}
-                title="YouTube video player"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowFullScreen
-              ></iframe>
-            </div>
-          </div>
-        )}
-        
+        {/* --- SECTION ORDER 5: Awards & Certifications --- */}
         {(profile.awards || profile.badges) && (
           <div className="section">
             <p className="section-title"><Award className="icon"/> AWARDS & CERTIFICATIONS</p>
@@ -157,8 +153,8 @@ const HolographicCard = ({ profile }) => {
             </div>
           </div>
         )}
-        
-        {/* --- UPDATED: General Info with Clickable Phone/Email --- */}
+
+        {/* --- SECTION ORDER 6: General information --- */}        
         {(profile.contactPhone || profile.contactEmail || profile.website || profile.openHours) && (
           <div className="section">
             <p className="section-title">GENERAL INFORMATION</p>
@@ -170,21 +166,23 @@ const HolographicCard = ({ profile }) => {
             </div>
           </div>
         )}
-        
+
+        {/* --- SECTION ORDER 7: Social Media --- */}
         {(profile.socialFacebook || profile.socialX || profile.socialInstagram || profile.socialLinkedin || profile.socialTiktok || profile.socialWhatsapp) && (
           <div className="section">
             <p className="section-title">SOCIAL MEDIA</p>
             <div className="social-links-container">
-              {profile.socialWhatsapp && <a href={getSocialLink('Whatsapp', profile.socialWhatsapp)} target="_blank" rel="noopener noreferrer" className="social-link-item"><img src={whatsappLogo} alt="WhatsApp logo" className="icon-svg"/><span>{profile.socialWhatsapp}</span></a>}
+              {profile.socialWhatsapp && <a href={getSocialLink('Whatsapp', profile.socialWhatsapp)} target="_blank" rel="noopener noreferrer" className="social-link-item"><img src={whatsappLogo} alt="WhatsApp logo" className="icon-svg"/><span>{(profile.socialWhatsapp || '').toString()}</span></a>}
               {profile.socialFacebook && <a href={getSocialLink('Facebook', profile.socialFacebook)} target="_blank" rel="noopener noreferrer" className="social-link-item"><Facebook className="icon" /><span>{profile.socialFacebook}</span></a>}
+              {profile.socialTiktok && <a href={getSocialLink('Tiktok', profile.socialTiktok)} target="_blank" rel="noopener noreferrer" className="social-link-item"><img src={tiktokLogo} alt="TikTok logo" className="icon-svg"/><span>{`@${(profile.socialTiktok || '').toString().replace('@','')}`}</span></a>}
               {profile.socialInstagram && <a href={getSocialLink('Instagram', profile.socialInstagram)} target="_blank" rel="noopener noreferrer" className="social-link-item"><Instagram className="icon" /><span>{profile.socialInstagram}</span></a>}
-              {profile.socialX && <a href={getSocialLink('X', profile.socialX)} target="_blank" rel="noopener noreferrer" className="social-link-item"><img src={xLogo} alt="X logo" className="icon-svg"/><span>{profile.socialX}</span></a>}              
-              {profile.socialTiktok && <a href={getSocialLink('Tiktok', profile.socialTiktok)} target="_blank" rel="noopener noreferrer" className="social-link-item"><img src={tiktokLogo} alt="TikTok logo" className="icon-svg"/><span>{`@${profile.socialTiktok.replace('@','')}`}</span></a>}
+              {profile.socialX && <a href={getSocialLink('X', profile.socialX)} target="_blank" rel="noopener noreferrer" className="social-link-item"><img src={xLogo} alt="X logo" className="icon-svg"/><span>{profile.socialX}</span></a>}
               {profile.socialLinkedin && <a href={getSocialLink('Linkedin', profile.socialLinkedin)} target="_blank" rel="noopener noreferrer" className="social-link-item"><Linkedin className="icon" /><span>{profile.socialLinkedin}</span></a>}
             </div>
           </div>
         )}
 
+        {/* --- SECTION ORDER 8: Payment Methods --- */}
         {profile.paymentMethods && (
           <div className="section">
             <p className="section-title">PAYMENT METHODS</p>
@@ -193,27 +191,24 @@ const HolographicCard = ({ profile }) => {
                 const cleanItemKey = item.trim().toLowerCase();
                 const displayName = getPaymentDisplayName(cleanItemKey);
                 const icon = getPaymentIcon(cleanItemKey);
-                return (
-                  <span key={i} className={`payment-method-item payment-method--${cleanItemKey}`}>
-                    {icon} {displayName}
-                  </span>
-                );
+                return ( <span key={i} className={`payment-method-item payment-method--${cleanItemKey}`}>{icon} {displayName}</span> );
               })}
             </div>
           </div>
         )}
 
+        {/* --- SECTION ORDER 9: Location --- */}
         {profile.locationAddress && (
           <div className="section">
             <p className="section-title">LOCATION</p>
             <a href={googleMapsUrl} target="_blank" rel="noopener noreferrer" className="location-box">
-                {/* The MapPin icon is now back inside the clickable link */}
                 <MapPin className="icon primary" />
                 <p className="location-address">{profile.locationAddress}</p>
             </a>
           </div>
         )}
 
+        {/* --- SECTION ORDER 10: Attributions --- */}
         {profile.attributions && (
           <div className="section">
               <p className="section-title">ATTRIBUTIONS</p>

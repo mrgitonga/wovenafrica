@@ -1,17 +1,15 @@
 // src/pages/HomePage.js
-
 import React from 'react';
 import wovenAfricaLogo from '../assets/woven-africa.png';
 import { Mail, Phone } from 'lucide-react';
-import '../styles/HomePage.css'; // We will create this CSS file
+import '../styles/HomePage.css';
 
 const HomePage = () => {
   return (
     <div className="home-page-container">
       <div className="home-content">
         <img src={wovenAfricaLogo} alt="Woven Africa" className="home-logo" />
-        <h1 className="home-title">WOVEN AFRICA</h1>
-        <p className="home-subtitle">Smart. Seamless. African.</p>
+        {/* The <h1> title has been removed */}
         <div className="contact-info">
           <p className="contact-title">Contact Us</p>
           <a href="mailto:e.nyagaanderson@gmail.com" className="contact-item">

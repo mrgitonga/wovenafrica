@@ -1,7 +1,7 @@
 // src/pages/ProfilePage.js
 
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import HolographicCard from '../components/HolographicCard';
 import GridBackground from '../components/GridBackground';
 import { useTheme } from '../contexts/ThemeContext';
@@ -72,15 +72,6 @@ const ProfilePage = () => {
         <HolographicCard profile={profile} />
       </main>
 
-      <footer className="page-footer">
-        <Link to="/">
-          <img src={wovenAfricaLogo} alt="Woven Africa Home" className="footer-logo" />
-        </Link>
-        <div className="footer-text">
-          <p>WOVEN AFRICA</p>
-          <span>Smart. Seamless. African.</span>
-        </div>
-      </footer>
     </div>
   );
 };

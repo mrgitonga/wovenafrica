@@ -9,11 +9,10 @@ html, body, #root {
 .profile-page-container {
   display: flex;
   flex-direction: column;
-  align-items: center; 
-  /* --- THIS IS THE KEY CHANGE --- */
-  /* We remove 'justify-content: space-between' to stop forcing the footer to the bottom */
-  min-height: 100vh; /* Ensure the container always fills at least the full screen height */
-  padding: 1.5rem;
+  align-items: center;
+  justify-content: flex-start; /* Aligns content to the top */
+  min-height: 100vh;
+  padding: 1.5rem 1.5rem; /* Remove top/bottom padding here */
   overflow-x: hidden;
 }
 
@@ -22,11 +21,9 @@ html, body, #root {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 1.5rem 0;
-  /* flex-grow is no longer needed as we're not distributing extra space this way */
+  margin: 15px 0;
   overflow: hidden;
 }
-
 .status-message {
   font-size: 1.2rem;
   font-family: monospace;
@@ -34,7 +31,7 @@ html, body, #root {
   text-align: center;
 }
 
-/* === Loader Styles (Unchanged) === */
+/* === UPDATED: Loader Styles === */
 .loading-container {
   position: fixed;
   top: 0;
@@ -48,32 +45,26 @@ html, body, #root {
   background-color: var(--background-color);
   z-index: 999;
 }
+
 .loading-logo {
   width: 90px;
-  margin-bottom: 1.5rem;
-  animation: logo-pulse 2.5s ease-in-out infinite;
+  margin-bottom: 2.5rem; /* Increased margin for better balance with the new loader */
+  /* --- THIS IS THE CHANGE: The animation property is removed --- */
 }
-@keyframes logo-pulse {
-  0%, 100% { transform: scale(1); opacity: 0.9; }
-  50% { transform: scale(1.05); opacity: 1; }
-}
+
+/* --- THIS IS THE NEW LOADER ANIMATION --- */
 .loader {
-  height: 80px;
-  aspect-ratio: 1;
-  padding: 10px;
-  border-radius: 20px;
-  box-sizing: border-box;
-  position: relative;
-  mask: conic-gradient(#000 0 0) content-box exclude, conic-gradient(#000 0 0);
-  filter: blur(12px);
+  width: 120px;
+  height: 12px; /* Slimmer for a sleek look */
+  -webkit-mask: linear-gradient(90deg, #000 70%, #0000 0) left/20% 100%;
+  mask: linear-gradient(90deg, #000 70%, #0000 0) left/20% 100%;
+  
+  background:
+   linear-gradient(var(--primary-color) 0 0) left -25% top 0 /20% 100% no-repeat
+   var(--box-background);
+
+  animation: l7 1.2s infinite steps(6);
 }
-.loader:before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: repeating-conic-gradient(#0000 0 5%, var(--loading-color) 0 20%, #0000 0 50%);
-  animation: l3 1.5s linear infinite;
-}
-@keyframes l3 {
-  to { transform: rotate(1turn); }
+@keyframes l7 {
+    100% {background-position: right -25% top 0}
 }
