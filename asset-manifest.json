@@ -1,18 +1,18 @@
 {
   "files": {
-    "main.css": "/wovenafrica/static/css/main.0809fcbb.css",
-    "main.js": "/wovenafrica/static/js/main.88602706.js",
+    "main.css": "/wovenafrica/static/css/main.a03e0e5f.css",
+    "main.js": "/wovenafrica/static/js/main.8ef5e88b.js",
     "static/media/woven-africa.png": "/wovenafrica/static/media/woven-africa.cf7f62bdae37c52c1a4f.png",
     "static/media/whatsapp.svg": "/wovenafrica/static/media/whatsapp.681a24bac6ce67ef84bbff6285b8d751.svg",
     "index.html": "/wovenafrica/index.html",
     "static/media/bitcoin.svg": "/wovenafrica/static/media/bitcoin.a256dd67b574cb284d6702c437ba5e8c.svg",
     "static/media/tiktok.svg": "/wovenafrica/static/media/tiktok.438878451f031dd0d6ed36e6c0888d28.svg",
     "static/media/x-logo.svg": "/wovenafrica/static/media/x-logo.1d4e0f65c4fd29a1da486b257946a103.svg",
-    "main.0809fcbb.css.map": "/wovenafrica/static/css/main.0809fcbb.css.map",
-    "main.88602706.js.map": "/wovenafrica/static/js/main.88602706.js.map"
+    "main.a03e0e5f.css.map": "/wovenafrica/static/css/main.a03e0e5f.css.map",
+    "main.8ef5e88b.js.map": "/wovenafrica/static/js/main.8ef5e88b.js.map"
   },
   "entrypoints": [
-    "static/css/main.0809fcbb.css",
-    "static/js/main.88602706.js"
+    "static/css/main.a03e0e5f.css",
+    "static/js/main.8ef5e88b.js"
   ]
 }
