@@ -4,7 +4,7 @@ import React from 'react';
 import '../styles/HolographicCard.css';
 import {
   Heart, Shield, Award, BadgeCheck, MapPin, Globe, Phone, Mail, Clock,
-  Facebook, Instagram, Linkedin, CreditCard, Wallet, Smartphone
+  Facebook, Instagram, Linkedin, CreditCard, Wallet, Smartphone, Youtube 
 } from 'lucide-react';
 
 import xLogo from '../assets/x-logo.svg';
@@ -85,6 +85,9 @@ const getSocialLink = (platform, handle) => {
     case 'Whatsapp':
       const phoneNumber = handleAsString.replace(/[\s-()+]/g, '');
       return `https://wa.me/${phoneNumber}`;
+    case 'Youtube':
+      const channelIdentifier = handleAsString.replace('@', '');
+      return `https://youtube.com/${channelIdentifier}`;
     default: return '#';
   }
 };
@@ -137,24 +140,7 @@ const HolographicCard = ({ profile }) => {
           )}
         </div>
 
-        {/* --- SECTION ORDER 5: Awards & Certifications --- */}
-        {(profile.awards || profile.badges) && (
-          <div className="section">
-            <p className="section-title"><Award className="icon"/> AWARDS & CERTIFICATIONS</p>
-            <div className="badge-container">
-              {profile.awards && (Array.isArray(profile.awards) ? profile.awards : [profile.awards]).map((item, i) => {
-                const parsed = parseLinkableItem(item);
-                return parsed.url ? <a key={i} href={parsed.url} target="_blank" rel="noopener noreferrer" className="badge primary">{parsed.text}</a> : <span key={i} className="badge primary">{parsed.text}</span>;
-              })}
-              {profile.badges && (Array.isArray(profile.badges) ? profile.badges : [profile.badges]).map((item, i) => {
-                const parsed = parseLinkableItem(item);
-                return parsed.url ? <a key={i} href={parsed.url} target="_blank" rel="noopener noreferrer" className="badge accent">{parsed.text}</a> : <span key={i} className="badge accent">{parsed.text}</span>;
-              })}
-            </div>
-          </div>
-        )}
-
-        {/* --- SECTION ORDER 6: General information --- */}        
+        {/* --- SECTION ORDER 5: General information --- */}        
         {(profile.contactPhone || profile.contactEmail || profile.website || profile.openHours) && (
           <div className="section">
             <p className="section-title">GENERAL INFORMATION</p>
@@ -167,22 +153,23 @@ const HolographicCard = ({ profile }) => {
           </div>
         )}
 
-        {/* --- SECTION ORDER 7: Social Media --- */}
+        {/* --- SECTION ORDER 6: Social Media --- */}
         {(profile.socialFacebook || profile.socialX || profile.socialInstagram || profile.socialLinkedin || profile.socialTiktok || profile.socialWhatsapp) && (
           <div className="section">
             <p className="section-title">SOCIAL MEDIA</p>
             <div className="social-links-container">
               {profile.socialWhatsapp && <a href={getSocialLink('Whatsapp', profile.socialWhatsapp)} target="_blank" rel="noopener noreferrer" className="social-link-item"><img src={whatsappLogo} alt="WhatsApp logo" className="icon-svg"/><span>{(profile.socialWhatsapp || '').toString()}</span></a>}
               {profile.socialFacebook && <a href={getSocialLink('Facebook', profile.socialFacebook)} target="_blank" rel="noopener noreferrer" className="social-link-item"><Facebook className="icon" /><span>{profile.socialFacebook}</span></a>}
-              {profile.socialTiktok && <a href={getSocialLink('Tiktok', profile.socialTiktok)} target="_blank" rel="noopener noreferrer" className="social-link-item"><img src={tiktokLogo} alt="TikTok logo" className="icon-svg"/><span>{`@${(profile.socialTiktok || '').toString().replace('@','')}`}</span></a>}
               {profile.socialInstagram && <a href={getSocialLink('Instagram', profile.socialInstagram)} target="_blank" rel="noopener noreferrer" className="social-link-item"><Instagram className="icon" /><span>{profile.socialInstagram}</span></a>}
+              {profile.socialYoutube && <a href={getSocialLink('Youtube', profile.socialYoutube)} target="_blank" rel="noopener noreferrer" className="social-link-item"><Youtube className="icon" /><span>{profile.socialYoutube}</span></a>}
+              {profile.socialTiktok && <a href={getSocialLink('Tiktok', profile.socialTiktok)} target="_blank" rel="noopener noreferrer" className="social-link-item"><img src={tiktokLogo} alt="TikTok logo" className="icon-svg"/><span>{`@${(profile.socialTiktok || '').toString().replace('@','')}`}</span></a>}
               {profile.socialX && <a href={getSocialLink('X', profile.socialX)} target="_blank" rel="noopener noreferrer" className="social-link-item"><img src={xLogo} alt="X logo" className="icon-svg"/><span>{profile.socialX}</span></a>}
               {profile.socialLinkedin && <a href={getSocialLink('Linkedin', profile.socialLinkedin)} target="_blank" rel="noopener noreferrer" className="social-link-item"><Linkedin className="icon" /><span>{profile.socialLinkedin}</span></a>}
             </div>
           </div>
         )}
 
-        {/* --- SECTION ORDER 8: Payment Methods --- */}
+        {/* --- SECTION ORDER 7: Payment Methods --- */}
         {profile.paymentMethods && (
           <div className="section">
             <p className="section-title">PAYMENT METHODS</p>
@@ -192,6 +179,22 @@ const HolographicCard = ({ profile }) => {
                 const displayName = getPaymentDisplayName(cleanItemKey);
                 const icon = getPaymentIcon(cleanItemKey);
                 return ( <span key={i} className={`payment-method-item payment-method--${cleanItemKey}`}>{icon} {displayName}</span> );
+              })}
+            </div>
+          </div>
+        )}
+        {/* --- SECTION ORDER 8: Awards & Certifications --- */}
+        {(profile.awards || profile.badges) && (
+          <div className="section">
+            <p className="section-title"><Award className="icon"/> AWARDS & CERTIFICATIONS</p>
+            <div className="badge-container">
+              {profile.awards && (Array.isArray(profile.awards) ? profile.awards : [profile.awards]).map((item, i) => {
+                const parsed = parseLinkableItem(item);
+                return parsed.url ? <a key={i} href={parsed.url} target="_blank" rel="noopener noreferrer" className="badge primary">{parsed.text}</a> : <span key={i} className="badge primary">{parsed.text}</span>;
+              })}
+              {profile.badges && (Array.isArray(profile.badges) ? profile.badges : [profile.badges]).map((item, i) => {
+                const parsed = parseLinkableItem(item);
+                return parsed.url ? <a key={i} href={parsed.url} target="_blank" rel="noopener noreferrer" className="badge accent">{parsed.text}</a> : <span key={i} className="badge accent">{parsed.text}</span>;
               })}
             </div>
           </div>

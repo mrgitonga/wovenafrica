@@ -5,19 +5,26 @@
 .embla__container { display: flex; }
 .embla__slide { flex: 0 0 100%; min-width: 0; position: relative; }
 
-.video-iframe {
-  /* This crucial rule tells the iframe to ignore all mouse/touch events,
-     allowing the parent carousel to handle swipes. */
+/* The container for the video player needs to match the iframe size */
+.embla__slide > .video-container > div[id^="youtube-iframe-"] {
+  width: 100%;
+  height: 100%;
+}
+
+/* --- THE DEFINITIVE FIX --- */
+/* This class makes the iframe non-interactive, guaranteeing swipes work */
+.is-swipeable {
   pointer-events: none;
 }
-/* --- NEW styles for the overlay logic --- */
-.unmute-overlay {
+
+/* --- The new interaction overlay --- */
+.interaction-overlay {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.4);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -26,36 +33,26 @@
   opacity: 0;
   transition: opacity 0.3s ease;
 }
-.video-container:hover .unmute-overlay {
+.video-container:hover .interaction-overlay {
   opacity: 1;
 }
-.unmute-text {
+.play-icon {
   color: white;
-  font-size: 1rem;
-  font-weight: bold;
-  padding: 0.5rem 1rem;
-  border: 2px solid white;
-  border-radius: 20px;
-  backdrop-filter: blur(5px);
+  filter: drop-shadow(0 0 5px rgba(0,0,0,0.5));
 }
-/* Dots container */
+
+
+/* --- Dot Styles (Unchanged) --- */
 .embla__dots {
   display: flex; justify-content: center; align-items: center; gap: 8px;
   position: absolute; bottom: -20px; left: 0; right: 0;
 }
-
-/* --- THIS IS THE CHANGE: Smaller dots --- */
 .embla__dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background-color: var(--border-color);
-  opacity: 0.5;
+  width: 6px; height: 6px; border-radius: 50%;
+  background-color: var(--border-color); opacity: 0.5;
   transition: opacity 0.2s, transform 0.2s;
 }
 .embla__dot.is-selected {
-  opacity: 1;
-  background-color: var(--primary-color);
-  transform: scale(1.3); /* Slightly smaller pop effect */
-  box-shadow: 0 0 8px var(--primary-color);
+  opacity: 1; background-color: var(--primary-color);
+  transform: scale(1.3); box-shadow: 0 0 8px var(--primary-color);
 }
